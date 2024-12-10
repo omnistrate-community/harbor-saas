@@ -304,12 +304,12 @@ services:
         parameterDependencyMap:
           terraformCloudflareR2: cloudflareBucketLocation
         labeledOptions:
-          Western North America: "WNAM"
-          Eastern North America: "ENAM"
-          Western Europe: "WEUR"
-          Eastern Europe: "EEUR"
-          Asia Pacific: "APAC"
-          Oceanic: "OC"
+          WNAM: "WNAM"
+          ENAM: "ENAM"
+          WEUR: "WEUR"
+          EEUR: "EEUR"
+          APAC: "APAC"
+          OC: "OC"
 
   - name: terraformCloudflareR2
     internal: true
