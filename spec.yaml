@@ -8,6 +8,8 @@ deployment:
 
 services:
   - name: Harbor
+    dependsOn:
+      - terraformCloudflareR2
     endpointConfiguration:
       cluster:
         host: "$sys.network.externalClusterEndpoint"
@@ -241,7 +243,6 @@ services:
                     - "$sys.deployment.resourceID"
         trivy:
           enabled: false
-
     apiParameters:
       - key: instanceType
         description: Instance Type
@@ -251,3 +252,75 @@ services:
         required: false
         export: true
         defaultValue: "t3.medium"
+      - key: cloudflareAPIToken
+        description: Cloudflare API Token to create R2 buckets
+        name: Cloudflare API Token
+        type: Password
+        modifiable: true
+        required: true
+        export: true
+        parameterDependencyMap:
+          terraformCloudflareR2: cloudflareAPIToken
+      - key: cloudflareAccountID
+        description: Cloudflare Account ID
+        name: Cloudflare Account ID
+        type: Password
+        modifiable: true
+        required: true
+        export: true
+        parameterDependencyMap:
+          terraformCloudflareR2: cloudflareAccountID
+      - key: cloudflareBucketLocation
+        description: Cloudflare Bucket Location
+        name: Cloudflare Bucket Location
+        type: String
+        modifiable: false
+        required: false
+        export: true
+        defaultValue: "Western North America"
+        parameterDependencyMap:
+          terraformCloudflareR2: cloudflareBucketLocation
+        labeledOptions:
+          Western North America: "wnam"
+          Eastern North America: "enam"
+          Western Europe: "weur"
+          Eastern Europe: "eeur"
+          Asia Pacific: "apac"
+          Oceanic: "oc"
+
+  - name: terraformCloudflareR2
+    internal: true
+    terraformConfigurations:
+      configurationPerCloudProvider:
+        aws:
+          terraformPath: /r2
+          gitConfiguration:
+            reference: refs/heads/main
+            repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git
+        gcp:
+          terraformPath: /r2
+          gitConfiguration:
+            reference: refs/heads/main
+            repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git
+    apiParameters:
+      - key: cloudflareAPIToken
+        description: Cloudflare API Token to create R2 buckets
+        name: Cloudflare API Token
+        type: Password
+        modifiable: true
+        required: true
+        export: true
+      - key: cloudflareAccountID
+        description: Cloudflare Account ID
+        name: Cloudflare Account ID
+        type: Password
+        modifiable: true
+        required: true
+        export: true
+      - key: cloudflareBucketLocation
+        description: Cloudflare Bucket Location
+        name: Cloudflare Bucket Location
+        type: String
+        modifiable: false
+        required: true
+        export: true
