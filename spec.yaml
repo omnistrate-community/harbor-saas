@@ -10,19 +10,6 @@ services:
   - name: Harbor
     dependsOn:
       - terraformCloudflareR2
-    endpointConfiguration:
-      cluster:
-        host: "$sys.network.externalClusterEndpoint"
-        ports:
-          - 8080
-        primary: true
-        networkingType: PUBLIC
-      internal:
-        host: "$sys.network.internalClusterEndpoint"
-        ports:
-          - 8080
-        primary: false
-        networkingType: INTERNAL
     compute:
       instanceTypes:
         - apiParam: instanceType
