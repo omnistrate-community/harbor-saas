@@ -41,25 +41,5 @@ resource "cloudflare_r2_bucket" "my_bucket" {
 
 output "r2_bucket_endpoint" {
   description = "The S3 API endpoint URL for the Cloudflare R2 bucket"
-  value       = "https://${var.cloudflare_account_id}.r2.cloudflarestorage.com/${cloudflare_r2_bucket.my_bucket.name}"
+  value       = "${var.cloudflare_account_id}.r2.cloudflarestorage.com"
 }
-
-#data "cloudflare_api_token_permission_groups" "this" {}
-#
-#locals {
-#  resources          = { "com.cloudflare.edge.r2.bucket.*" = "*" }
-#  token_bucket_names = "All-Buckets"
-#}
-#
-#resource "cloudflare_api_token" "token" {
-#  name = "R2-${local.token_bucket_names}-Read-Write"
-#  policy {
-#    permission_groups = compact([
-#      data.cloudflare_api_token_permission_groups.this.r2["Workers R2 Storage Bucket Item Read"],
-#      data.cloudflare_api_token_permission_groups.this.r2["Workers R2 Storage Bucket Item Write"],
-#    ])
-#    resources = local.resources
-#  }
-#  not_before = null
-#  expires_on = null
-#}
