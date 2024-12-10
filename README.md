@@ -23,3 +23,6 @@ omnistrate-ctl build -f spec.yaml --name 'Harbor' --release-as-preferred --spec-
 
 2. Automated deployment and management of Harbor Helm charts and cloud infrastructure
 ![pods](pods.png)
+
+3. Harbor Registry Portal through a custom DNS
+![harbor](harbor.png)
