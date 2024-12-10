@@ -164,6 +164,15 @@ services:
                     values:
                     - "$sys.deployment.resourceID"
         persistence:
+          imageChartStorage:
+            type: oss
+            oss:
+              accessKey: $var.r2AccessKey
+              accessKeySecret: $var.r2AccessKeySecret
+              region: $var.cloudflareBucketLocation
+              bucket: $sys.id
+              endpoint: $terraformCloudflareR2.out.r2_bucket_endpoint
+
           persistenceVolumeClaim:
             database:
               storageClass: gp2
@@ -252,6 +261,20 @@ services:
         required: false
         export: true
         defaultValue: "t3.medium"
+      - key: r2AccessKey
+        description: R2 Access Key
+        name: R2 Access Key
+        type: Password
+        modifiable: true
+        required: true
+        export: true
+      - key: r2AccessKeySecret
+        description: R2 Access Key Secret
+        name: R2 Access Key Secret
+        type: Password
+        modifiable: true
+        required: true
+        export: true
       - key: cloudflareAPIToken
         description: Cloudflare API Token to create R2 buckets
         name: Cloudflare API Token
@@ -281,12 +304,12 @@ services:
         parameterDependencyMap:
           terraformCloudflareR2: cloudflareBucketLocation
         labeledOptions:
-          Western North America: "wnam"
-          Eastern North America: "enam"
-          Western Europe: "weur"
-          Eastern Europe: "eeur"
-          Asia Pacific: "apac"
-          Oceanic: "oc"
+          Western North America: "WNAM"
+          Eastern North America: "ENAM"
+          Western Europe: "WEUR"
+          Eastern Europe: "EEUR"
+          Asia Pacific: "APAC"
+          Oceanic: "OC"
 
   - name: terraformCloudflareR2
     internal: true
@@ -295,12 +318,12 @@ services:
         aws:
           terraformPath: /r2
           gitConfiguration:
-            reference: refs/heads/main
+            reference: refs/heads/master
             repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git
         gcp:
           terraformPath: /r2
           gitConfiguration:
-            reference: refs/heads/main
+            reference: refs/heads/master
             repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git
     apiParameters:
       - key: cloudflareAPIToken
