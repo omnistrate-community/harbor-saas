@@ -300,7 +300,7 @@ services:
         modifiable: false
         required: false
         export: true
-        defaultValue: "Western North America"
+        defaultValue: "WNAM"
         parameterDependencyMap:
           terraformCloudflareR2: cloudflareBucketLocation
         labeledOptions:
