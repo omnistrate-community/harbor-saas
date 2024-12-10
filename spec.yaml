@@ -164,15 +164,15 @@ services:
                     values:
                     - "$sys.deployment.resourceID"
         persistence:
-          imageChartStorage:
-            type: oss
-            oss:
-              accessKey: $var.r2AccessKey
-              accessKeySecret: $var.r2AccessKeySecret
-              region: $var.cloudflareBucketLocation
-              bucket: $sys.id
-              endpoint: $terraformCloudflareR2.out.r2_bucket_endpoint
-
+          # Uncomment after fixing issue w/ R2 as S3 API
+          # imageChartStorage:
+          #   type: oss
+          #   oss:
+          #     accessKey: $var.r2AccessKey
+          #     accessKeySecret: $var.r2AccessKeySecret
+          #     region: $var.cloudflareBucketLocation
+          #     bucket: $sys.id
+          #     endpoint: $terraformCloudflareR2.out.r2_bucket_endpoint
           persistenceVolumeClaim:
             database:
               storageClass: gp2
