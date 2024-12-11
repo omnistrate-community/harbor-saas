@@ -6,6 +6,37 @@ deployment:
     AwsAccountId: "ACCOUNT_ID"
     AWSBootstrapRoleAccountArn: arn:aws:iam::ACCOUNT_ID:role/omnistrate-bootstrap-role
 
+loadBalancers:
+  https:
+    - name: harbor-lb
+      description: Harbor Load Balancer
+      enableCustomDNS: false
+      paths:
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /api/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core 
+          associatedResourceKey: harbor
+          path: /service/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /v2/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /chartrepo/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /c/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-portal
+          associatedResourceKey: harbor
+          path: /
+          backendPort: 80
+
 services:
   - name: Harbor
     dependsOn:
@@ -19,11 +50,6 @@ services:
     network:
       ports:
         - 6379
-    capabilities:
-      customDNS:
-        TargetKubernetesService:
-          TargetName: harbor-portal
-          TargetPort: 80
     helmChartConfiguration:
       chartName: harbor
       chartVersion: 1.15.1
@@ -97,15 +123,6 @@ services:
                     operator: In
                     values:
                     - "$sys.deployment.resourceID"
-        expose:
-          ingress:
-            hosts:
-              core: "$sys.network.externalClusterEndpoint"
-          tls:
-            certSource: secret
-            secret:
-              secretName: "$sys.deployment.tlsServerCertificateSecretName"
-          type: Ingress
         jobservice:
           affinity:
             nodeAffinity:
