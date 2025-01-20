@@ -10,7 +10,6 @@ loadBalancers:
   https:
     - name: harbor-lb
       description: Harbor Load Balancer
-      enableCustomDNS: false
       paths:
         - targetKubernetesServiceName: harbor-core
           associatedResourceKey: harbor
