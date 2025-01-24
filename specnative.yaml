@@ -3,8 +3,8 @@
 name: Harbor SaaS # Service Plan Name
 deployment:
   hostedDeployment:
-    AwsAccountId: "339713121445"
-    AWSBootstrapRoleAccountArn: arn:aws:iam::339713121445:role/omnistrate-bootstrap-role
+    AwsAccountId: "541226919566"
+    AWSBootstrapRoleAccountArn: arn:aws:iam::541226919566:role/omnistrate-bootstrap-role
 
 loadBalancers:
   https:
@@ -38,6 +38,8 @@ loadBalancers:
 
 services:
   - name: Harbor
+    dependsOn:
+      - terraformRegistryStorage
     compute:
       instanceTypes:
         - apiParam: instanceType
@@ -168,8 +170,8 @@ services:
           imageChartStorage:
             type: s3
             s3:
-              region: {{ $sys.deploymentCell.region }}
-              bucket: {{ $terraformRegistryStorage.out.bucket_name }}
+              region: "{{ $sys.deploymentCell.region }}"
+              bucket: "{{ $terraformRegistryStorage.out.bucket_name }}"
           persistenceVolumeClaim:
             database:
               storageClass: gp2
