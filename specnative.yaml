@@ -1,0 +1,275 @@
+# yaml-language-server: $schema=https://api.omnistrate.cloud/2022-09-01-00/schema/service-spec-schema.json
+
+name: Harbor SaaS # Service Plan Name
+deployment:
+  hostedDeployment:
+    AwsAccountId: "339713121445"
+    AWSBootstrapRoleAccountArn: arn:aws:iam::339713121445:role/omnistrate-bootstrap-role
+
+loadBalancers:
+  https:
+    - name: harbor-lb
+      description: Harbor Load Balancer
+      paths:
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /api/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core 
+          associatedResourceKey: harbor
+          path: /service/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /v2/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /chartrepo/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-core
+          associatedResourceKey: harbor
+          path: /c/
+          backendPort: 80
+        - targetKubernetesServiceName: harbor-portal
+          associatedResourceKey: harbor
+          path: /
+          backendPort: 80
+
+services:
+  - name: Harbor
+    compute:
+      instanceTypes:
+        - apiParam: instanceType
+          cloudProvider: aws
+        - apiParam: instanceType
+          cloudProvider: gcp
+    network:
+      ports:
+        - 6379
+    helmChartConfiguration:
+      chartName: harbor
+      chartVersion: 1.15.1
+      chartRepoName: harbor
+      chartRepoURL: https://helm.goharbor.io
+      chartValues:
+        core:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        database:
+          internal:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: omnistrate.com/managed-by
+                      operator: In
+                      values:
+                      - omnistrate
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values:
+                      - "$sys.deploymentCell.region"
+                    - key: node.kubernetes.io/instance-type
+                      operator: In
+                      values:
+                      - "$sys.compute.node.instanceType"
+                    - key: omnistrate.com/resource
+                      operator: In
+                      values:
+                      - "$sys.deployment.resourceID"
+        exporter:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        jobservice:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        nginx:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        persistence:
+          imageChartStorage:
+            type: s3
+            s3:
+              region: {{ $sys.deploymentCell.region }}
+              bucket: {{ $terraformRegistryStorage.out.bucket_name }}
+          persistenceVolumeClaim:
+            database:
+              storageClass: gp2
+            redis:
+              storageClass: gp2
+            registry:
+              storageClass: gp2
+            trivy:
+              storageClass: gp2
+          resourcePolicy: ''
+        portal:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        redis:
+          internal:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: omnistrate.com/managed-by
+                      operator: In
+                      values:
+                      - omnistrate
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values:
+                      - "$sys.deploymentCell.region"
+                    - key: node.kubernetes.io/instance-type
+                      operator: In
+                      values:
+                      - "$sys.compute.node.instanceType"
+                    - key: omnistrate.com/resource
+                      operator: In
+                      values:
+                      - "$sys.deployment.resourceID"
+        registry:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: omnistrate.com/managed-by
+                    operator: In
+                    values:
+                    - omnistrate
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                    - "$sys.deploymentCell.region"
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                    - "$sys.compute.node.instanceType"
+                  - key: omnistrate.com/resource
+                    operator: In
+                    values:
+                    - "$sys.deployment.resourceID"
+        trivy:
+          enabled: false
+    apiParameters:
+      - key: instanceType
+        description: Instance Type
+        name: Instance Type
+        type: String
+        modifiable: true
+        required: false
+        export: true
+        defaultValue: "t3.medium"
+
+  - name: terraformRegistryStorage
+    internal: true
+    terraformConfigurations:
+      configurationPerCloudProvider:
+        aws:
+          terraformPath: /s3
+          gitConfiguration:
+            reference: refs/heads/master
+            repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git
+        gcp:
+          terraformPath: /gcs
+          gitConfiguration:
+            reference: refs/heads/master
+            repositoryUrl: https://github.com/omnistrate-community/harbor-saas.git

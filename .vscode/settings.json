@@ -1,5 +1,6 @@
 {
     "yaml.schemas": {
-        "https://api.omnistrate.dev/2022-09-01-00/schema/service-spec-schema.json": "file:///home/aloknnikhil/harbor/spec.yaml"
+        "https://api.omnistrate.dev/2022-09-01-00/schema/service-spec-schema.json": "file:///home/aloknnikhil/harbor/spec.yaml",
+        "https://api.omnistrate.cloud/2022-09-01-00/schema/service-spec-schema.json": "file:///home/aloknnikhil/harbor/specnocloudflare.yaml"
     }
 }
