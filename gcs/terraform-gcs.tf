@@ -19,7 +19,6 @@ resource "google_storage_bucket" "repobucket" {
   labels = {
     tenantid        = lower("{{ $sys.tenant.userID }}")
     tenantorgid     = lower("{{ $sys.tenant.orgId }}")
-    tenantorgname  = lower("{{ $sys.tenant.orgName }}")
   }
 }
 
