@@ -17,9 +17,9 @@ resource "google_storage_bucket" "repobucket" {
 
   # Add labels (optional)
   labels = {
-    TenantID        = "{{ $sys.tenant.userID }}"
-    TenantOrgID     = "{{ $sys.tenant.orgId }}"
-    TenantOrgName  = "{{ $sys.tenant.orgName }}"
+    tenantid        = "{{ $sys.tenant.userID }}"
+    tenantorgid     = "{{ $sys.tenant.orgId }}"
+    tenantorgname  = "{{ $sys.tenant.orgName }}"
   }
 }
 
