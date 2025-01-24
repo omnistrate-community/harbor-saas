@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "repobucket" {
   # Add tags to the bucket (optional)
   tags = {
     TenantID        = "{{ $sys.tenant.userID }}"
-    TenantOrgID     = "{{ $sys.tenant.orgID }}"
+    TenantOrgID     = "{{ $sys.tenant.orgId }}"
     TenantOrgName  = "{{ $sys.tenant.orgName }}"
   }
 }
